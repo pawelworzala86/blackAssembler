@@ -13,10 +13,21 @@ const fileBuffer = Buffer.concat([headers.dosHeader, headers.peHeader, headers.f
 
 
 
+
+
+
+function loadSection(name){
+    let code = fs.readFileSync('./sections/'+name+'.txt').toString()
+    code = code.replace(/\;.*/gm,'')
+    code = code.replace(/\n|\ /gm,'')
+    return Buffer.from(code, 'hex')
+}
+
+
 const sectionsData = {}
-sectionsData.text = fs.readFileSync('./sections/.text.bin')
-sectionsData.data = fs.readFileSync('./sections/.data.bin')
-sectionsData.idata = fs.readFileSync('./sections/.idata.bin')
+sectionsData.text = loadSection('.text')
+sectionsData.data = loadSection('.data')
+sectionsData.idata = loadSection('.idata')
 
 const sections = []
 
@@ -38,7 +49,7 @@ sections.push({
 })
 sections.push({
     name: ".text",
-    virtualSize: 46,//sectionsData.text.length,
+    virtualSize: sectionsData.text.length,
     virtualAddress: 4096*1,
     sizeOfRawData: 512,
     pointerToRawData: 512*1,
@@ -46,7 +57,7 @@ sections.push({
 })
 sections.push({
     name: ".data",
-    virtualSize: 3,//sectionsData.data.length,
+    virtualSize: sectionsData.data.length,
     virtualAddress: 4096*2,
     sizeOfRawData: 512,
     pointerToRawData: 512*2,
@@ -54,7 +65,7 @@ sections.push({
 })
 sections.push({
     name: ".idata",
-    virtualSize: 184,//sectionsData.idata.length,
+    virtualSize: sectionsData.idata.length,
     virtualAddress: 4096*3,
     sizeOfRawData: 512,
     pointerToRawData: 512*3,
@@ -72,7 +83,7 @@ function writeSection(section,idx){
     const sectionOffset = 64 + 24 + 224 + (idx * 40);
     fileBuffer.write(section.name.padEnd(8, '\0'), sectionOffset, 'utf8');
 
-    console.log('virtualSize',section.virtualSize)
+    //console.log('virtualSize',section.virtualSize)
     fileBuffer.writeUInt32LE(section.virtualSize, sectionOffset + 8);
     fileBuffer.writeUInt32LE(section.virtualAddress, sectionOffset + 12);
     fileBuffer.writeUInt32LE(section.sizeOfRawData, sectionOffset + 16);
