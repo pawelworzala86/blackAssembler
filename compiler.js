@@ -1,34 +1,7 @@
-const fs = require('fs');
-
-let idata = `  dd 0,0,0,RVA kernel_name,RVA kernel_table
-  dd 0,0,0,RVA msvcrt_name,RVA msvcrt_table
-  dd 0,0,0,0,0
-
-  kernel_table:
-    ExitProcess:
-     dq RVA _ExitProcess
-    dq 0
-  msvcrt_table:
-    printf:
-     dq RVA _printf
-    dq 0
-
-  kernel_name:
-   db 'KERNEL32.DLL',0
-  msvcrt_name:
-   db 'MSVCRT.DLL',0
-
-  _ExitProcess:
-   dw 0
-    db 'ExitProcess',0
-  _printf:
-   dw 0
-    db 'printf',0`
 
 
 let OFFSET = 0x3000
 const CALLS = {}
-
 
 
 function LE(text){
@@ -60,7 +33,10 @@ function DectoHex8(dec){
 }
 
 
-let lines = idata.split('\n')
+function make(code){
+
+
+let lines = code.split('\n')
 function parse(){
 lines = lines.map(line=>{
     line=line.trim()
@@ -165,6 +141,10 @@ lines = lines.map(line=>{
 
 
 
-idata = lines.join('\n')
+code = lines.join('\n')
 
-fs.writeFileSync('./idata.txt',idata)
+return code
+
+}
+
+module.exports = make
