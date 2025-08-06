@@ -1,15 +1,18 @@
-include 'win64a.inc'
+include 'format/format.inc'
 
-format PE64 CONSOLE 5.0
+format PE64 CONSOLE
 entry start
 
 section '.text' code readable executable
     start:
-    sub	rsp,8*5
+    sub	rsp, 8*5
 
-    invoke printf, message
+    lea rcx, [message]
+    call [printf]
 
-    invoke	ExitProcess,0
+    ;add rsp, 8*5
+    mov rcx, 0
+    call [ExitProcess]
 
 section '.data' data readable writeable
     message db "OK",0
