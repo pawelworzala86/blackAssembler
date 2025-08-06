@@ -27,7 +27,7 @@ function loadSection(name){
 const sectionsData = {}
 sectionsData.text = loadSection('.text.exp')
 sectionsData.data = loadSection('.data.exp')
-sectionsData.idata = loadSection('.idata.exp')
+sectionsData.idata = loadSection('idata')
 
 const sections = []
 

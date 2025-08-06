@@ -102,7 +102,7 @@ lines = lines.map(line=>{
     }
     if(line.split(' ')[0]=='db'){
         let val = line.replace('db','').trim().split('\'')[1]
-        OFFSET+=val.length
+        OFFSET+=val.length+1
     }
     line=line.replace(/([a-zA-Z0-9\_]+)\:/gm,match=>{
         let name = match.split(':')[0].trim()
