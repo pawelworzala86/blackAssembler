@@ -1,4 +1,5 @@
 const fs = require('fs');
+const make = require('./compiler')
 
 let idata = `  dd 0,0,0,RVA kernel_name,RVA kernel_table
   dd 0,0,0,RVA msvcrt_name,RVA msvcrt_table
@@ -25,9 +26,6 @@ let idata = `  dd 0,0,0,RVA kernel_name,RVA kernel_table
    dw 0
     db 'printf',0`
 
-
-const make = require('./make')
-
 idata = make(idata)
 
 fs.writeFileSync('./cache/idata.txt',idata)
@@ -41,7 +39,7 @@ let data = `4f4b00`
 
 data = make(data)
 
-fs.writeFileSync('./data.txt',data)
+fs.writeFileSync('./cache/data.txt',data)
 
 
 

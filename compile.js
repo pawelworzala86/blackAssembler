@@ -17,7 +17,7 @@ const fileBuffer = Buffer.concat([headers.dosHeader, headers.peHeader, headers.f
 
 
 function loadSection(name){
-    let code = fs.readFileSync('./sections/'+name+'.txt').toString()
+    let code = fs.readFileSync('./cache/'+name+'.txt').toString()
     code = code.replace(/\;.*/gm,'')
     code = code.replace(/\n|\ /gm,'')
     return Buffer.from(code, 'hex')
@@ -25,8 +25,8 @@ function loadSection(name){
 
 
 const sectionsData = {}
-sectionsData.text = loadSection('.text.exp')
-sectionsData.data = loadSection('.data.exp')
+sectionsData.text = loadSection('text')
+sectionsData.data = loadSection('data')
 sectionsData.idata = loadSection('idata')
 
 const sections = []
