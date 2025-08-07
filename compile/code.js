@@ -1,5 +1,5 @@
 const fs = require('fs');
-const make = require('./compiler')
+const make = require('./compiler.js')
 
 let idata = `  dd 0,0,0,RVA kernel_name,RVA kernel_table
   dd 0,0,0,RVA msvcrt_name,RVA msvcrt_table
@@ -55,3 +55,8 @@ FF 15 1E 20 00 00                   ; call QWORD PTR [rip + 0x201e]`
 text = make(text)
 
 fs.writeFileSync('./cache/text.txt',text)
+
+
+module.exports = function(){
+  return {text,data,idata}
+}

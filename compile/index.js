@@ -1,4 +1,5 @@
 const fs = require('fs');
+const code = require('./code.js');
 
 const headers = {};
 
@@ -16,18 +17,19 @@ const fileBuffer = Buffer.concat([headers.dosHeader, headers.peHeader, headers.f
 
 
 
-function loadSection(name){
-    let code = fs.readFileSync('./cache/'+name+'.txt').toString()
+function loadSection(code){
+    //let code = fs.readFileSync('./cache/'+name+'.txt').toString()
     code = code.replace(/\;.*/gm,'')
     code = code.replace(/\n|\ /gm,'')
     return Buffer.from(code, 'hex')
 }
 
+const {text,data,idata} = code()
 
 const sectionsData = {}
-sectionsData.text = loadSection('text')
-sectionsData.data = loadSection('data')
-sectionsData.idata = loadSection('idata')
+sectionsData.text = loadSection(text)
+sectionsData.data = loadSection(data)
+sectionsData.idata = loadSection(idata)
 
 const sections = []
 
@@ -97,4 +99,4 @@ function writeSection(section,idx){
 
 
 
-fs.writeFileSync('./testNew.exe', fileBuffer)
+fs.writeFileSync('./out/testNew.exe', fileBuffer)
