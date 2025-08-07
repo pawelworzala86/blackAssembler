@@ -277,11 +277,12 @@ function ParseLine(line){
         let func = parts[1]
         
         let start = 'ff'
-        let modrm = '14'
+        //let modrm = '14'
+        let modrm = '15'
 
-        off=func
+        off=func.replace('0x','')
         off = off[6]+off[7]+' '+off[4]+off[5]+' '+off[2]+off[3]+' '+off[0]+off[1]
-        result=start+' '+modrm+' 25 '+off
+        result=start+' '+modrm/*+' 25 '*/+off
     }
     if((call=='jmp')&&(target=='short')){
         let parts = line.split(' ')
