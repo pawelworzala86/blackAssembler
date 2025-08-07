@@ -271,7 +271,13 @@ function ParseLine(line){
 
         //console.log('from',from)
         //process.exit(1)
-        from = LE(from.replace('0x',''))
+        if(from.indexOf('0x')>-1){
+            from = LE(from.replace('0x',''))
+        }else{
+            let offset = CALLS[from]+OFFSET
+            console.log(from,offset)
+            from = LE(DectoHex4(offset))
+        }
 
         /*let addr = getDataOffset(from)//line.split('0x')[1].split(']')[0].trim()
         //console.log('addr',addr)
