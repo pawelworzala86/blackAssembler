@@ -161,7 +161,7 @@ function LE(text){
 
 
 
-
+const FUNCTIONS = {}
 
 module.exports = function(CODE, CALLS){
     

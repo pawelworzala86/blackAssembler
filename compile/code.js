@@ -1,9 +1,39 @@
 const fs = require('fs');
 const make = require('./compiler.js')
 
+
+
+
+
 const CALLS = {}
 
-let idata = `  dd 0,0,0,RVA kernel_name,RVA kernel_table
+
+const code = fs.readFileSync('./source/test.asm').toString()
+const source = {
+  text: '',
+  data: '',
+  idata: '',
+}
+let active = ''
+code.split('\n').map(line=>{
+  line=line.trim()
+  if(!line.length){
+    return
+  }
+  if(line=='section \'.text\''){
+    active = 'text'
+  }else if(line=='section \'.data\''){
+    active = 'data'
+  }else if(line=='section \'.idata\''){
+    active = 'idata'
+  }else{
+    source[active]+=line+'\n'
+  }
+})
+console.log(source)
+
+
+let idata = source.idata/*`  dd 0,0,0,RVA kernel_name,RVA kernel_table
   dd 0,0,0,RVA msvcrt_name,RVA msvcrt_table
   dd 0,0,0,0,0
 
@@ -27,7 +57,7 @@ let idata = `  dd 0,0,0,RVA kernel_name,RVA kernel_table
   _printf:
    dw 0
     db 'printf',0`
-
+*/
 idata = make(idata, CALLS)
 
 fs.writeFileSync('./cache/idata.txt',idata)
@@ -38,10 +68,10 @@ fs.writeFileSync('./cache/idata.txt',idata)
 
 
 //let data = `4f4b00`
-let data = `message:
+let data = source.data/*`message:
 db 'OK',0
 messageB:
-db 'ok',0`
+db 'ok',0`*/
 
 //CALLS['message'] = 0xff0+1
 let offset = 0xff0+1
@@ -63,11 +93,11 @@ FF 15 3B 20 00 00                   ; call QWORD PTR [rip + 0x203b]
 48 C7 C1 00 00 00 00                ; mov rcx, 0x0
 FF 15 1E 20 00 00                   ; call QWORD PTR [rip + 0x201e]`*/
 
-let text = `sub rsp, 0x28
+let text = source.text/*`sub rsp, 0x28
 lea rcx, messageB  ;0x00000ff5
 call printf
 mov rcx, 0x00000000
-call ExitProcess`
+call ExitProcess`*/
 
 /*function DectoHex4(dec){
     let val = parseInt(dec)
