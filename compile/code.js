@@ -57,7 +57,7 @@ FF 15 3B 20 00 00                   ; call QWORD PTR [rip + 0x203b]
 FF 15 1E 20 00 00                   ; call QWORD PTR [rip + 0x201e]`*/
 
 let text = `sub rsp, 0x28
-lea rcx, 0x0ff5
+lea rcx, 0x00000ff5
 call printf
 mov rcx, 0x00000000
 call ExitProcess`
