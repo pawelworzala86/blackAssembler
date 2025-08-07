@@ -46,6 +46,8 @@ fs.writeFileSync('./cache/data.txt',data)
 
 
 
+const oldCompile = require('./compiler.old.js')
+
 let text = `48 83 EC 28                         ; sub rsp, 0x28
 48 8D 0D F5 0F 00 00                ; lea rcx, [rip + 0xff5]     ; adres względny
 FF 15 3B 20 00 00                   ; call QWORD PTR [rip + 0x203b]
