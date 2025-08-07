@@ -148,18 +148,27 @@ function getOptCodeRegReg(target,from){
 
 
 
+function DectoHex4(dec){
+    let val = parseInt(dec)
+    val = val.toString(16)
+    val = val.padStart(8,'00')
+    return val
+}
+function LE(text){
+    let bytes = text.match(/.{2}/g);
+    return bytes.reverse().join(' ');
+}
 
 
 
 
 
-
-module.exports = function(CODE, CONSTS, DATA){
+module.exports = function(CODE, CALLS){
     
-    function getDataOffset(name){
+    /*function getDataOffset(name){
         return DATA.getDataOffset(name)
     }
-
+*/
     function MakeHex(result){
         result=result.replace(/\ /gm,'')
         let res = ''
@@ -280,8 +289,11 @@ function ParseLine(line){
         //let modrm = '14'
         let modrm = '15'
 
-        off=func.replace('0x','')
-        off = off[6]+off[7]+' '+off[4]+off[5]+' '+off[2]+off[3]+' '+off[0]+off[1]
+        console.log('OFFSET',OFFSET)
+        const off = LE(DectoHex4(CALLS[func]-((12364-8251-10)+OFFSET)))
+
+        //off=func.replace('0x','')
+        //off = off[6]+off[7]+' '+off[4]+off[5]+' '+off[2]+off[3]+' '+off[0]+off[1]
         result=start+' '+modrm/*+' 25 '*/+off
     }
     if((call=='jmp')&&(target=='short')){

@@ -1,6 +1,8 @@
 const fs = require('fs');
 const make = require('./compiler.js')
 
+const CALLS = {}
+
 let idata = `  dd 0,0,0,RVA kernel_name,RVA kernel_table
   dd 0,0,0,RVA msvcrt_name,RVA msvcrt_table
   dd 0,0,0,0,0
@@ -26,7 +28,7 @@ let idata = `  dd 0,0,0,RVA kernel_name,RVA kernel_table
    dw 0
     db 'printf',0`
 
-idata = make(idata)
+idata = make(idata, CALLS)
 
 fs.writeFileSync('./cache/idata.txt',idata)
 
@@ -37,7 +39,7 @@ fs.writeFileSync('./cache/idata.txt',idata)
 
 let data = `4f4b00`
 
-data = make(data)
+data = make(data, CALLS)
 
 fs.writeFileSync('./cache/data.txt',data)
 
@@ -56,11 +58,24 @@ FF 15 1E 20 00 00                   ; call QWORD PTR [rip + 0x201e]`*/
 
 let text = `sub rsp, 0x28
 lea rcx, 0x0ff5
-call 0x0000203b
+call printf
 mov rcx, 0x00000000
-call 0x0000201e`
+call ExitProcess`
 
-text = oldCompile(text)
+/*function DectoHex4(dec){
+    let val = parseInt(dec)
+    val = val.toString(16)
+    val = val.padStart(8,'00')
+    return val
+}
+function LE(text){
+    let bytes = text.match(/.{2}/g);
+    return bytes.reverse().join(' ');
+}
+console.log('printf',LE(DectoHex4(CALLS['printf']-(12364-8251))))
+console.log('ExitProcess',LE(DectoHex4(CALLS['ExitProcess']-(12364-8251))))
+*/
+text = oldCompile(text, CALLS)
 
 fs.writeFileSync('./cache/text.txt',text)
 

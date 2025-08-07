@@ -1,7 +1,6 @@
 
 
 let OFFSET = 0x3000
-const CALLS = {}
 
 
 function LE(text){
@@ -33,7 +32,7 @@ function DectoHex8(dec){
 }
 
 
-function make(code){
+function make(code,CALLS){
 
 
 let lines = code.split('\n')
