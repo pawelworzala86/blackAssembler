@@ -7,8 +7,10 @@ section '.text'
 
 
 section '.data'
-    message db 'OK',0
-    messageB db 'ok',0
+    message:
+db 'OK',0
+    messageB:
+db 'ok',0
     
 
 section '.idata'
@@ -17,10 +19,12 @@ section '.idata'
     dd 0,0,0,0,0
 
     kernel_table:
-        ExitProcess dq RVA _ExitProcess
+        ExitProcess:
+dq RVA _ExitProcess
         dq 0
     msvcrt_table:
-        printf dq RVA _printf
+        printf:
+dq RVA _printf
         dq 0
 
     kernel_name:

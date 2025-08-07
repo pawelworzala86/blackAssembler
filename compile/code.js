@@ -1,6 +1,6 @@
 const fs = require('fs');
 const make = require('./compiler.js')
-
+const prepare = require('./prepare.js')
 
 
 
@@ -8,7 +8,9 @@ const make = require('./compiler.js')
 const CALLS = {}
 
 
-const code = fs.readFileSync('./source/test.asm').toString()
+let code = fs.readFileSync('./source/test.asm').toString()
+code = prepare(code)
+
 const source = {
   text: '',
   data: '',
