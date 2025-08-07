@@ -39,7 +39,9 @@ fs.writeFileSync('./cache/idata.txt',idata)
 
 //let data = `4f4b00`
 let data = `message:
-db 'OK',0`
+db 'OK',0
+messageB:
+db 'ok',0`
 
 //CALLS['message'] = 0xff0+1
 let offset = 0xff0+1
@@ -62,7 +64,7 @@ FF 15 3B 20 00 00                   ; call QWORD PTR [rip + 0x203b]
 FF 15 1E 20 00 00                   ; call QWORD PTR [rip + 0x201e]`*/
 
 let text = `sub rsp, 0x28
-lea rcx, message  ;0x00000ff5
+lea rcx, messageB  ;0x00000ff5
 call printf
 mov rcx, 0x00000000
 call ExitProcess`
