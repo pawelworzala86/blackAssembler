@@ -299,8 +299,14 @@ function ParseLine(line){
         let modrm = '15'
 
         console.log('OFFSET',OFFSET)
+        //console.log('CALLS',CALLS[func]-OFFSET)
+        console.log('CALLS',CALLS[func]-((12364-8251-11)+OFFSET))
         const off = LE(DectoHex4(CALLS[func]-((12364-8251-11)+OFFSET)))
         //const off = LE(DectoHex4(CALLS[func]-OFFSET))
+        //8251
+        //8238
+        //8225
+        //8196 - ExitP...
 
         //off=func.replace('0x','')
         //off = off[6]+off[7]+' '+off[4]+off[5]+' '+off[2]+off[3]+' '+off[0]+off[1]

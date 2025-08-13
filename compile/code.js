@@ -60,7 +60,7 @@ let idata = source.idata/*`  dd 0,0,0,RVA kernel_name,RVA kernel_table
    dw 0
     db 'printf',0`
 */
-let offset = 0x3000//-(12364-8251-11)
+let offset = 0x3000//-(12364-8251))+11
 idata = make(idata, CALLS, offset)
 
 fs.writeFileSync('./cache/idata.txt',idata)
