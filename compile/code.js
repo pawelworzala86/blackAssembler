@@ -6,7 +6,7 @@ const prepare = require('./prepare.js')
 
 
 const CALLS = {}
-
+const iCALLS = {}
 
 let code = fs.readFileSync('./source/test.asm').toString()
 code = prepare(code)
@@ -61,7 +61,7 @@ let idata = source.idata/*`  dd 0,0,0,RVA kernel_name,RVA kernel_table
     db 'printf',0`
 */
 let offset = 0x3000//-(12364-8251))+11
-idata = make(idata, CALLS, offset)
+idata = make(idata, iCALLS, offset)
 
 fs.writeFileSync('./cache/idata.txt',idata)
 
@@ -115,7 +115,7 @@ function LE(text){
 console.log('printf',LE(DectoHex4(CALLS['printf']-(12364-8251))))
 console.log('ExitProcess',LE(DectoHex4(CALLS['ExitProcess']-(12364-8251))))
 */
-text = oldCompile(text, CALLS)
+text = oldCompile(text, CALLS, iCALLS)
 
 fs.writeFileSync('./cache/text.txt',text)
 

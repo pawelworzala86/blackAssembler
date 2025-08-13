@@ -163,7 +163,7 @@ function LE(text){
 
 const FUNCTIONS = {}
 
-module.exports = function(CODE, CALLS){
+module.exports = function(CODE, CALLS, iCALLS){
     
     /*function getDataOffset(name){
         return DATA.getDataOffset(name)
@@ -190,6 +190,14 @@ function ParseLine(line){
     let rightReg = false
 
     //console.log(REGS)
+
+    function getAddr(from){
+        if(CALLS[from]){
+            return CALLS[from]-OFFSET
+        }else{
+            return iCALLS[from]-((12364-8251-11)+OFFSET)
+        }
+    }
 
     if(call=='hex'){
         return MakeHex(line.replace('hex',''))
@@ -276,7 +284,7 @@ function ParseLine(line){
         }else{
             console.log('OFFSET DATA',OFFSET)
             //let offset = (CALLS[from]+(1024*4))-(OFFSET+7)
-            let offset = CALLS[from]-OFFSET
+            let offset = getAddr(from)//CALLS[from]-OFFSET
             console.log(from,offset,DectoHex4(offset))
             from = LE(DectoHex4(offset))
         }
@@ -300,8 +308,8 @@ function ParseLine(line){
 
         console.log('OFFSET',OFFSET)
         //console.log('CALLS',CALLS[func]-OFFSET)
-        console.log('CALLS',CALLS[func]-((12364-8251-11)+OFFSET))
-        const off = LE(DectoHex4(CALLS[func]-((12364-8251-11)+OFFSET)))
+        console.log('CALLS',iCALLS[func]-((12364-8251-11)+OFFSET))
+        const off = LE(DectoHex4(getAddr(func)))
         //const off = LE(DectoHex4(CALLS[func]-OFFSET))
         //8251
         //8238
