@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const fileName = 'test.exe';
+const fileName = './asm/test.exe';
 const buffer = fs.readFileSync('./'+fileName);
 
 

@@ -1,6 +1,10 @@
 section '.text'
     sub rsp, 0x28
-    lea rcx, messageB  ;0x00000ff5
+    lea rcx, message  ;0x00000ff5
+    call printf
+    lea rcx, messageB   ;0x00000fe8
+    call printf
+    lea rcx, messageB   ;0x00000fd8
     call printf
     mov rcx, 0x00000000
     call ExitProcess
@@ -11,6 +15,8 @@ section '.data'
 db 'OK',0
     messageB:
 db 'ok',0
+    messageC:
+db 'oK',0
     
 
 section '.idata'

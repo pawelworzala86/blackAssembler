@@ -76,7 +76,7 @@ messageB:
 db 'ok',0`*/
 
 //CALLS['message'] = 0xff0+1
-let offset = 0xff0+1
+let offset = 0//0xff0//+1
 
 data = make(data, CALLS, offset)
 

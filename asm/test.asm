@@ -10,12 +10,20 @@ section '.text' code readable executable
     lea rcx, [message]
     call [printf]
 
+    lea rcx, [messageB]
+    call [printf]
+
+    lea rcx, [messageC]
+    call [printf]
+
     ;add rsp, 8*5
     mov rcx, 0
     call [ExitProcess]
 
 section '.data' data readable writeable
     message db "OK",0
+    messageB db "ok",0
+    messageC db "oK",0
 
 section '.idata' import data readable writeable
   dd 0,0,0,RVA kernel_name,RVA kernel_table

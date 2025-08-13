@@ -274,8 +274,9 @@ function ParseLine(line){
         if(from.indexOf('0x')>-1){
             from = LE(from.replace('0x',''))
         }else{
-            let offset = CALLS[from]+OFFSET
-            console.log(from,offset)
+            console.log('OFFSET DATA',OFFSET)
+            let offset = (CALLS[from]+(1024*4))-(OFFSET+7)
+            console.log(from,offset,DectoHex4(offset))
             from = LE(DectoHex4(offset))
         }
 
