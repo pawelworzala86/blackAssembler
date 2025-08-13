@@ -275,7 +275,8 @@ function ParseLine(line){
             from = LE(from.replace('0x',''))
         }else{
             console.log('OFFSET DATA',OFFSET)
-            let offset = (CALLS[from]+(1024*4))-(OFFSET+7)
+            //let offset = (CALLS[from]+(1024*4))-(OFFSET+7)
+            let offset = CALLS[from]-OFFSET
             console.log(from,offset,DectoHex4(offset))
             from = LE(DectoHex4(offset))
         }
@@ -299,6 +300,7 @@ function ParseLine(line){
 
         console.log('OFFSET',OFFSET)
         const off = LE(DectoHex4(CALLS[func]-((12364-8251-11)+OFFSET)))
+        //const off = LE(DectoHex4(CALLS[func]-OFFSET))
 
         //off=func.replace('0x','')
         //off = off[6]+off[7]+' '+off[4]+off[5]+' '+off[2]+off[3]+' '+off[0]+off[1]
