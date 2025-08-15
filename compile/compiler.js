@@ -181,6 +181,8 @@ function DectoHex8(dec){
 
 function make(code,CALLS,OFFSET=0x3000, ADDR){
 
+    let offset = OFFSET
+
 
     function getAddr(from){
         if(ADDR.CALLS[from]){
@@ -204,66 +206,8 @@ function make(code,CALLS,OFFSET=0x3000, ADDR){
     }
 
 
-
-
-
-
-
-
-let lines = code.split('\n')
-function parse(){
-lines = lines.map(line=>{
-    line=line.replace(/\;.*/gm,'')
-    line=line.trim()
-    if(line.split(' ')[0]=='dd'){
-        let val = line.replace('dd','').trim().split(',').map(v=>v.trim()).map(v=>{
-            if(v.indexOf('RVA')>-1){
-                let vn = v.replace('RVA ','').trim()
-                console.log('vn',vn)
-                if(CALLS[vn]){
-                    return 'RVA '+CALLS[vn]
-                }else{
-                    return 'RVA '+vn
-                }
-            }
-            return v
-        })
-        OFFSET+=val.length*4
-        line = 'dd '+val.join(',')
-    }
-    if(line.split(' ')[0]=='dq'){
-        let val = line.replace('dq','').trim().split(',').map(v=>v.trim()).map(v=>{
-            if(v.indexOf('RVA')>-1){
-                let vn = v.replace('RVA ','').trim()
-                console.log('vn',vn)
-                if(CALLS[vn]){
-                    return 'RVA '+CALLS[vn]
-                }else{
-                    return 'RVA '+vn
-                }
-            }
-            return v
-        })
-        OFFSET+=val.length*8
-        line = 'dq '+val.join(',')
-    }
-    if(line.split(' ')[0]=='dw'){
-        let val = line.replace('dw','').trim().split(',').map(v=>v.trim())
-        OFFSET+=val.length*2
-        return line
-    }
-    if(line.split(' ')[0]=='db'){
-        let val = line.replace('db','').trim().split('\'')[1]
-        OFFSET+=val.length+1
-        return line
-    }
-    line=line.replace(/([a-zA-Z0-9\_]+)\:/gm,match=>{
-        let name = match.split(':')[0].trim()
-        CALLS[name] = OFFSET
-        return ''
-    })
-
-    //console.log('line', line)
+function pLine(line){
+        //console.log('line', line)
     if(line.split(' ')[0]=='lea'){
         const params = getParams('lea', line)
         console.log('LEA', params)
@@ -300,14 +244,15 @@ lines = lines.map(line=>{
         let parts = line.split(' ')
         let func = parts[1]
         //let off = toHexMinus2(num+1)
-        let num = CALLS[func]//FUNCTIONS[func]-(OFFSET+5)
-        //console.log('num',num)
+        console.log('CALLS',CALLS)
+        let num = CALLS[func]-(OFFSET+5)//FUNCTIONS[func]-(OFFSET+5)
+        console.log('num',num, func)
         //console.log('...',FUNCTIONS[func],OFFSET)
 
         let bytes = ''
 
         if(num>=0){
-            let off = addHex('00000000', littleEndian.fromHex(num))
+            let off = conv.addHex('00000000', conv.littleEndian.fromHex(num))
             //console.log('off',off)
             off=off.hex.padStart(8, '0');
             off = off[0]+off[1]+' '+off[2]+off[3]+' '+off[4]+off[5]+' '+off[6]+off[7]
@@ -315,7 +260,7 @@ lines = lines.map(line=>{
             bytes = off
         }else{
             //let num = FUNCTIONS[func]-(OFFSET+6)
-            let off = toHexMinus(num+1)
+            let off = conv.toHexMinus(num+1)
             off = off[6]+off[7]+' '+off[4]+off[5]+' '+off[2]+off[3]+' '+off[0]+off[1]
             //console.log('off OFF',off)
             bytes = off
@@ -392,7 +337,71 @@ lines = lines.map(line=>{
             return ''
         }
     }
+}
 
+
+
+
+
+let lines = code.split('\n')
+function parse(){
+    OFFSET=offset
+lines = lines.map(line=>{
+    line=line.replace(/\;.*/gm,'')
+    line=line.trim()
+    if(line.split(' ')[0]=='dd'){
+        let val = line.replace('dd','').trim().split(',').map(v=>v.trim()).map(v=>{
+            if(v.indexOf('RVA')>-1){
+                let vn = v.replace('RVA ','').trim()
+                console.log('vn',vn)
+                if(CALLS[vn]){
+                    return 'RVA '+CALLS[vn]
+                }else{
+                    return 'RVA '+vn
+                }
+            }
+            return v
+        })
+        OFFSET+=val.length*4
+        line = 'dd '+val.join(',')
+    }
+    if(line.split(' ')[0]=='dq'){
+        let val = line.replace('dq','').trim().split(',').map(v=>v.trim()).map(v=>{
+            if(v.indexOf('RVA')>-1){
+                let vn = v.replace('RVA ','').trim()
+                console.log('vn',vn)
+                if(CALLS[vn]){
+                    return 'RVA '+CALLS[vn]
+                }else{
+                    return 'RVA '+vn
+                }
+            }
+            return v
+        })
+        OFFSET+=val.length*8
+        line = 'dq '+val.join(',')
+    }
+    if(line.split(' ')[0]=='dw'){
+        let val = line.replace('dw','').trim().split(',').map(v=>v.trim())
+        OFFSET+=val.length*2
+        return line
+    }
+    if(line.split(' ')[0]=='db'){
+        let val = line.replace('db','').trim().split('\'')[1]
+        OFFSET+=val.length+1
+        return line
+    }
+    line=line.replace(/([\.a-zA-Z0-9\_]+)\:/gm,match=>{
+        let name = match.split(':')[0].trim()
+        CALLS[name] = OFFSET
+        return ''
+    })
+
+
+    const result = pLine(line)
+    //if(result&&result.length){
+    //    return result
+    //}
 
     return line
 })
@@ -401,7 +410,7 @@ parse()
 console.log('CALLS',CALLS)
 parse()
 
-
+OFFSET=offset
 
 lines = lines.map(line=>{
     let type = line.split(' ')[0]
@@ -445,6 +454,13 @@ lines = lines.map(line=>{
         }
         return ret+'00'
     }
+
+
+    const result = pLine(line)
+    if(result&&result.length){
+        return result
+    }
+    
     return line
 })
 

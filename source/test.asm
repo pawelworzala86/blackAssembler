@@ -1,9 +1,11 @@
 section '.text'
     sub rsp, 0x28
+    jmp .skip2
     lea rcx, message  ;0x00000ff5
     call printf
     lea rcx, messageB   ;0x00000fe8
     call printf
+    .skip2:
     lea rcx, messageB   ;0x00000fd8
     call printf
     mov rcx, 0x00000000
