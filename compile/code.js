@@ -1,7 +1,7 @@
 const fs = require('fs');
 const make = require('./compiler.js')
 const prepare = require('./prepare.js')
-
+const parseIData = require('./idata.js')
 
 
 
@@ -36,7 +36,10 @@ code.split('\n').map(line=>{
 console.log(source)
 
 
-let idata = source.idata/*`  dd 0,0,0,RVA kernel_name,RVA kernel_table
+
+let idata = prepare(parseIData(source.idata))
+
+/*`  dd 0,0,0,RVA kernel_name,RVA kernel_table
   dd 0,0,0,RVA msvcrt_name,RVA msvcrt_table
   dd 0,0,0,0,0
 

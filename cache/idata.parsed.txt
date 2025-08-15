@@ -3,14 +3,11 @@ dd 0,0,0,RVA msvcrt_name,RVA msvcrt_table
 dd 0,0,0,0,0
 
 kernel_table:
-    ExitProcess:
-dq RVA _ExitProcess
+    ExitProcess dq RVA _ExitProcess
     dq 0
 msvcrt_table:
-    printf:
-dq RVA _printf
-    malloc:
-dq RVA _malloc
+    printf dq RVA _printf
+    malloc dq RVA _malloc
     dq 0
 
 kernel_name:
