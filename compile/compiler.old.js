@@ -199,6 +199,17 @@ function ParseLine(line){
         }
     }
 
+    if(target&&(target.indexOf('0x')==-1)&&/^[a-zA-Z0-9\_]+$/gm.exec(target)&&!REGS.includes(target)&&(target!==undefined)){
+        let addr = getAddr(target)
+        console.log('target',target,addr)
+        target = '0x'+DectoHex4(addr)
+    }
+    if(from&&(from.indexOf('0x')==-1)&&/^[a-zA-Z0-9\_]+$/gm.exec(from)&&!REGS.includes(from)&&(from!==undefined)){
+        let addr = getAddr(from)
+        console.log('from',from,addr)
+        from = '0x'+DectoHex4(addr)
+    }
+
     if(call=='hex'){
         return MakeHex(line.replace('hex',''))
     }
@@ -279,15 +290,15 @@ function ParseLine(line){
 
         //console.log('from',from)
         //process.exit(1)
-        if(from.indexOf('0x')>-1){
+       // if(from.indexOf('0x')>-1){
             from = LE(from.replace('0x',''))
-        }else{
+        /*}/*else{
             console.log('OFFSET DATA',OFFSET)
             //let offset = (CALLS[from]+(1024*4))-(OFFSET+7)
             let offset = getAddr(from)//CALLS[from]-OFFSET
             console.log(from,offset,DectoHex4(offset))
             from = LE(DectoHex4(offset))
-        }
+        }*/
 
         /*let addr = getDataOffset(from)//line.split('0x')[1].split(']')[0].trim()
         //console.log('addr',addr)
@@ -300,7 +311,8 @@ function ParseLine(line){
     }
     if(call=='call'){
         let parts = line.split(' ')
-        let func = parts[1]
+        let func = target//parts[1]
+        //console.log('parts[1]',parts[1], from, target)
         
         let start = 'ff'
         //let modrm = '14'
@@ -308,8 +320,13 @@ function ParseLine(line){
 
         console.log('OFFSET',OFFSET)
         //console.log('CALLS',CALLS[func]-OFFSET)
-        console.log('CALLS',iCALLS[func]-((12364-8251-11)+OFFSET))
-        const off = LE(DectoHex4(getAddr(func)))
+        //console.log('CALLS',iCALLS[func]-((12364-8251-11)+OFFSET))
+        //let off
+        //if(func.indexOf('0x')>-1){
+            const off = LE(func.replace('0x',''))
+        //}else{
+        //    off = LE(DectoHex4(getAddr(func)))
+        //}
         //const off = LE(DectoHex4(CALLS[func]-OFFSET))
         //8251
         //8238
