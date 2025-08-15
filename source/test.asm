@@ -26,6 +26,7 @@ section '.idata'
         dq 0
     msvcrt_table:
         printf dq RVA _printf
+        malloc dq RVA _malloc
         dq 0
 
     kernel_name:
@@ -39,3 +40,6 @@ section '.idata'
     _printf:
     dw 0
         db 'printf',0
+    _malloc:
+    dw 0
+        db 'malloc',0

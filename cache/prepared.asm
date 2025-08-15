@@ -31,6 +31,8 @@ dq RVA _ExitProcess
     msvcrt_table:
         printf:
 dq RVA _printf
+        malloc:
+dq RVA _malloc
         dq 0
 
     kernel_name:
@@ -44,3 +46,6 @@ dq RVA _printf
     _printf:
     dw 0
         db 'printf',0
+    _malloc:
+    dw 0
+        db 'malloc',0
