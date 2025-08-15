@@ -7,6 +7,7 @@ const prepare = require('./prepare.js')
 
 const CALLS = {}
 const iCALLS = {}
+const tCALLS = {}
 
 let code = fs.readFileSync('./source/test.asm').toString()
 code = prepare(code)
@@ -61,7 +62,7 @@ let idata = source.idata/*`  dd 0,0,0,RVA kernel_name,RVA kernel_table
     db 'printf',0`
 */
 let offset = 0x3000//-(12364-8251))+11
-idata = make(idata, iCALLS, offset)
+idata = make(idata, iCALLS, offset, {iCALLS,CALLS,tCALLS})
 
 fs.writeFileSync('./cache/idata.txt',idata)
 
@@ -79,7 +80,7 @@ db 'ok',0`*/
 //CALLS['message'] = 0xff0+1
 offset = (1024*4)-7//0xff0//+1
 
-data = make(data, CALLS, offset)
+data = make(data, CALLS, offset, {iCALLS,CALLS,tCALLS})
 
 fs.writeFileSync('./cache/data.txt',data)
 
@@ -88,7 +89,7 @@ fs.writeFileSync('./cache/data.txt',data)
 
 
 
-const oldCompile = require('./compiler.old.js')
+//const oldCompile = require('./compiler.old.js')
 
 /*let text = `48 83 EC 28                         ; sub rsp, 0x28
 48 8D 0D F5 0F 00 00                ; lea rcx, [rip + 0xff5]     ; adres względny
@@ -115,7 +116,9 @@ function LE(text){
 console.log('printf',LE(DectoHex4(CALLS['printf']-(12364-8251))))
 console.log('ExitProcess',LE(DectoHex4(CALLS['ExitProcess']-(12364-8251))))
 */
-text = oldCompile(text, CALLS, iCALLS)
+offset = 0
+text = make(text, tCALLS, offset, {iCALLS,CALLS,tCALLS})
+//text = oldCompile(text, CALLS, iCALLS)
 
 fs.writeFileSync('./cache/text.txt',text)
 
