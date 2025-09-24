@@ -213,13 +213,26 @@ function pLine(line){
         console.log('LEA', params)
 
         let lea = '8d'
-        let bytemode = '0d' //rcx
-        let result = '48 '+lea+' '+bytemode
-        bytemode = {
-            'rax':'0a',
-            'rcx':'0d',
-            //'rsi':'fde0f',
+        let bytemode = {
+            'rax': '08',
+            'rcx': '0d',
+            'rdx': '15',
+            'rbx': '1d',
+            'rsp': '24',
+            'rbp': '2d',
+            'rsi': '35',
+            'rdi': '3d',
+            'r8':  '41 08',
+            'r9':  '41 0d',
+            'r10': '41 15',
+            'r11': '41 1d',
+            'r12': '41 24',
+            'r13': '41 2d',
+            'r14': '41 35',
+            'r15': '41 3d',
         }[params[0]]
+
+        let result = '48 '+lea+' '+bytemode
 
         from = LE(params[1].replace('0x',''))
 
