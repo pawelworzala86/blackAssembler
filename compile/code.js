@@ -23,11 +23,11 @@ code.split('\n').map(line=>{
   if(!line.length){
     return
   }
-  if(line=='section \'.text\''){
+  if(line=='.code'){
     active = 'text'
-  }else if(line=='section \'.data\''){
+  }else if(line=='.data'){
     active = 'data'
-  }else if(line=='section \'.idata\''){
+  }else if(line=='.import'){
     active = 'idata'
   }else{
     source[active]+=line+'\n'

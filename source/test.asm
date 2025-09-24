@@ -1,4 +1,4 @@
-section '.text'
+.code
     sub rsp, 0x28
     jmp .skip2
     lea rcx, message  ;0x00000ff5
@@ -12,13 +12,13 @@ section '.text'
     call ExitProcess
 
 
-section '.data'
+.data
     message db 'OK',0
     messageB db 'ok',0
     messageC db 'oK',0
     
 
-section '.idata'
+.import
     library kernel,'KERNEL32.DLL',\
 	    msvcrt,'MSVCRT.DLL'
 
