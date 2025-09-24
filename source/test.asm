@@ -6,7 +6,8 @@
     lea rcx, messageB   ;0x00000fe8
     call printf
 .skip2:
-    lea rcx, messageB   ;0x00000fd8
+    lea rcx, message
+    ;lea rcx, messageB   ;0x00000fd8
     call printf
     mov rcx, 0x00000000
     call ExitProcess

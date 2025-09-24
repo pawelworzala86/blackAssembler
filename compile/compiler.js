@@ -207,10 +207,10 @@ function make(code,CALLS,OFFSET=0x3000, ADDR){
 
 
 function pLine(line){
-        //console.log('line', line)
+    
     if(line.split(' ')[0]=='lea'){
         const params = getParams('lea', line)
-        console.log('LEA', params)
+        //console.log('LEA', params)
 
         let lea = '8d'
         let bytemode = {
@@ -241,7 +241,7 @@ function pLine(line){
         return line
     }else if(line.split(' ')[0]=='call'){
         const params = getParams('call', line)
-        console.log('CALL', params)
+        //console.log('CALL', params)
 
         let start = 'ff'
         //let modrm = '14'
@@ -257,9 +257,9 @@ function pLine(line){
         let parts = line.split(' ')
         let func = parts[1]
         //let off = toHexMinus2(num+1)
-        console.log('CALLS',CALLS)
+        //console.log('CALLS',CALLS)
         let num = CALLS[func]-(OFFSET+5)//FUNCTIONS[func]-(OFFSET+5)
-        console.log('num',num, func)
+        //console.log('num',num, func)
         //console.log('...',FUNCTIONS[func],OFFSET)
 
         let bytes = ''
@@ -303,7 +303,7 @@ function pLine(line){
                 }
             })
             const instr = name+' '+mnem.join(', ')
-            console.log('INSTR', instr)
+            //console.log('INSTR', instr)
             let rightReg = REGS.includes(params[1])
             let target = params[0]
             let from = params[1]
@@ -469,7 +469,9 @@ lines = lines.map(line=>{
     }
 
 
+    console.log('line', line)
     const result = pLine(line)
+    console.log('result', result)
     if(result&&result.length){
         return result
     }
