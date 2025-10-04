@@ -2,6 +2,7 @@ const conv = require('./convert.js')
 
 const {getXorInstruction} = require('./instructions/xor.js')
 const {getMovInstruction} = require('./instructions/mov.js')
+const {getLeaInstruction} = require('./instructions/lea.js')
 
 //48
 const regOptCodeX64 = {
@@ -61,12 +62,12 @@ let REGS_RD = Object.keys(regOptCodeX64RD)
 
 
 const instructions = [
-    { mnemonic: "mov r32, imm32", opcode: "B8 + rd" },
+    /*{ mnemonic: "mov r32, imm32", opcode: "B8 + rd" },
     { mnemonic: "mov r64, imm32", opcode: "B8 + rd" },
     { mnemonic: "mov r/m32, r32", opcode: "89 /r" },
     { mnemonic: "mov r/m64, r64", opcode: "48 89 /r" },
     { mnemonic: "mov r/m64, imm32", opcode: "48 C7 /r id" },
-    { mnemonic: "mov r/m64, imm64", opcode: "48 C7 /r id" },
+    { mnemonic: "mov r/m64, imm64", opcode: "48 C7 /r id" },*/
 
     { mnemonic: "add r/m8, imm8", opcode: "80 /0 ib" },
     { mnemonic: "add r/m32, imm32", opcode: "81 /0 id" },
@@ -217,34 +218,9 @@ function pLine(line){
         const params = getParams('lea', line)
         //console.log('LEA', params)
 
-        let lea = '8d'
-        let reg_table = {
-            'rax': { rex: '48', modrm: '05' },
-            'rcx': { rex: '48', modrm: '0d' },
-            'rdx': { rex: '48', modrm: '15' },
-            'rbx': { rex: '48', modrm: '1d' },
-            'rsp': { rex: '48', modrm: '25' },
-            'rbp': { rex: '48', modrm: '2d' },
-            'rsi': { rex: '48', modrm: '35' },
-            'rdi': { rex: '48', modrm: '3d' },
-            'r8':  { rex: '4c', modrm: '05' },
-            'r9':  { rex: '4c', modrm: '0d' },
-            'r10': { rex: '4c', modrm: '15' },
-            'r11': { rex: '4c', modrm: '1d' },
-            'r12': { rex: '4c', modrm: '25' },
-            'r13': { rex: '4c', modrm: '2d' },
-            'r14': { rex: '4c', modrm: '35' },
-            'r15': { rex: '4c', modrm: '3d' },
-        }[params[0]]
+        line = getLeaInstruction(params)
 
-        let result = reg_table.rex + ' ' + lea + ' ' + reg_table.modrm
-
-        // LE - funkcja zamieniająca wartość little endian, np. 0x12345678 -> '78 56 34 12'
-        from = LE(params[1].replace('0x',''))
-
-        line = result + ' ' + from
-
-        OFFSET+=7
+        OFFSET+=line.split(' ').length
         return line
     }else if(line.split(' ')[0]=='mov'){
         console.log('line', line)
@@ -258,11 +234,6 @@ function pLine(line){
         console.log('line', line)
         const params = getParams('xor', line)
         
-        // getXorInstruction(['rax', 'rax'])      // => '48 31 C0'
-        // getXorInstruction(['r12', 'r12'])      // => '4D 31 E4'
-        // getXorInstruction(['r9', '0x12345678'])// => '49 81 F1 78 56 34 12'
-
-        //console.log('params',params)
         line = getXorInstruction(params)
 
         OFFSET+=line.split(' ').length
