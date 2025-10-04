@@ -12,7 +12,8 @@ const {getDivInstruction} = require('./instructions/div.js')
 const {getAndInstruction} = require('./instructions/and.js')
 const {getOrInstruction} = require('./instructions/and.js')
 
-
+const {getCallInstruction} = require('./instructions/call.js')
+const {getJmpInstruction} = require('./instructions/jmp.js')
 
 
 //48
@@ -118,8 +119,8 @@ const instructions = [
     { mnemonic: "jmp rel32", opcode: "E9 cd" },
     { mnemonic: "jmp imm8", opcode: "EB id" },
 
-    { mnemonic: "call rel32", opcode: "E8 cd" },
-    { mnemonic: "call r/m64", opcode: "FF /2" },
+    //{ mnemonic: "call rel32", opcode: "E8 cd" },
+    //{ mnemonic: "call r/m64", opcode: "FF /2" },
 
     { mnemonic: "ret", opcode: "C3" },
     { mnemonic: "ret imm16", opcode: "C2 iw" },
@@ -255,45 +256,17 @@ function pLine(line){
         const params = getParams('call', line)
         //console.log('CALL', params)
 
-        let start = 'ff'
-        //let modrm = '14'
-        let modrm = '15'
+        line = getCallInstruction(params)
 
-        //console.log('OFFSET',OFFSET)
-        const off = LE(params[0].replace('0x',''))
-
-        line = start+' '+modrm+' '+off
-        OFFSET+=6
+        OFFSET+=line.split(' ').length
         return line
     }else if(line.split(' ')[0]=='jmp'){
         let parts = line.split(' ')
-        let func = parts[1]
-        //let off = toHexMinus2(num+1)
-        //console.log('CALLS',CALLS)
-        let num = CALLS[func]-(OFFSET+5)//FUNCTIONS[func]-(OFFSET+5)
-        //console.log('num',num, func)
-        //console.log('...',FUNCTIONS[func],OFFSET)
 
-        let bytes = ''
+        line = getJmpInstruction(parts,CALLS,OFFSET)
 
-        if(num>=0){
-            let off = conv.addHex('00000000', conv.littleEndian.fromHex(num))
-            //console.log('off',off)
-            off=off.hex.padStart(8, '0');
-            off = off[0]+off[1]+' '+off[2]+off[3]+' '+off[4]+off[5]+' '+off[6]+off[7]
-            //console.log('off',off)
-            bytes = off
-        }else{
-            //let num = FUNCTIONS[func]-(OFFSET+6)
-            let off = conv.toHexMinus(num+1)
-            off = off[6]+off[7]+' '+off[4]+off[5]+' '+off[2]+off[3]+' '+off[0]+off[1]
-            //console.log('off OFF',off)
-            bytes = off
-        }
-
-        result = 'e9 '+bytes
-        OFFSET += 5
-        return result
+        OFFSET+=line.split(' ').length
+        return line
     }else{
 
         let name = line.split(' ')[0]
