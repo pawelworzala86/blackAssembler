@@ -14,3 +14,7 @@ const peHeader =
   movDx;
 
 console.log(peHeader=='0e1fba0e'); // "0e1fba0e"
+
+export function get(){
+    return peHeader
+}

@@ -3,12 +3,11 @@ const code = require('./code.js');
 
 const headers = {};
 
-headers.dosHeader = fs.readFileSync('./headers/dosHeader.bin')
-headers.peHeader = fs.readFileSync('./headers/peHeader.bin')
-headers.fileHeader = fs.readFileSync('./headers/fileHeader.bin')
-headers.optionalHeader = fs.readFileSync('./headers/optionalHeader.bin')
-let sectionHeaders = fs.readFileSync('./headers/sectionHeaders.bin')
-
+headers.dosHeader = Buffer.from(require('./../headers/dosHeader.js').get(),'hex')
+headers.peHeader = Buffer.from(require('./../headers/peHeader.js').get(),'hex')
+headers.fileHeader = Buffer.from(require('./../headers/fileHeader.js').get(),'hex')
+headers.optionalHeader = Buffer.from(require('./../headers/optionalHeader.js').get(),'hex')
+let sectionHeaders = Buffer.from(require('./../headers/sectionHeaders.js').get(),'hex')
 
 
 
@@ -36,7 +35,7 @@ sectionsData.sidata = Math.ceil(sectionsData.idata.length / 512) * 512;
 
 
 
-//headers.sectionHeaders = Buffer.alloc(1024);
+//sectionHeaders = Buffer.alloc(512);
 // Jeśli bufor jest za krótki, powiększamy go do size bajtów
 const size = (2248-2048)+sectionsData.stext+sectionsData.sdata+sectionsData.sidata
 if (sectionHeaders.length < size) {
