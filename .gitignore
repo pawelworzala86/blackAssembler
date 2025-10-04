@@ -3,3 +3,5 @@
 /cache/*.asm
 /cache/*.ts
 /cache/*.inc
+
+/out/*.exe
