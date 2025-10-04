@@ -3,11 +3,11 @@ const code = require('./code.js');
 
 const headers = {};
 
-headers.dosHeader = Buffer.from(require('./../headers/dosHeader.js').get(),'hex')
-headers.peHeader = Buffer.from(require('./../headers/peHeader.js').get(),'hex')
-headers.fileHeader = Buffer.from(require('./../headers/fileHeader.js').get(),'hex')
-headers.optionalHeader = Buffer.from(require('./../headers/optionalHeader.js').get(),'hex')
-let sectionHeaders = Buffer.from(require('./../headers/sectionHeaders.js').get(),'hex')
+headers.dosHeader = Buffer.from(require('./headers/dosHeader.js').get(),'hex')
+headers.peHeader = Buffer.from(require('./headers/peHeader.js').get(),'hex')
+headers.fileHeader = Buffer.from(require('./headers/fileHeader.js').get(),'hex')
+headers.optionalHeader = Buffer.from(require('./headers/optionalHeader.js').get(),'hex')
+let sectionHeaders = Buffer.from(require('./headers/sectionHeaders.js').get(),'hex')
 
 
 

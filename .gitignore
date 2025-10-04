@@ -1,0 +1,5 @@
+/cache/*.txt
+/cache/*.js
+/cache/*.asm
+/cache/*.ts
+/cache/*.inc

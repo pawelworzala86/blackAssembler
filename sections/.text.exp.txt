@@ -1,5 +1,0 @@
-48 83 EC 28                         ; sub rsp, 0x28
-48 8D 0D F5 0F 00 00                ; lea rcx, [rip + 0xff5]     ; adres względny
-FF 15 3B 20 00 00                   ; call QWORD PTR [rip + 0x203b]
-48 C7 C1 00 00 00 00                ; mov rcx, 0x0
-FF 15 1E 20 00 00                   ; call QWORD PTR [rip + 0x201e]
