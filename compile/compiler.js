@@ -1,5 +1,7 @@
 const conv = require('./convert.js')
+
 const {getXorInstruction} = require('./instructions/xor.js')
+const {getMovInstruction} = require('./instructions/mov.js')
 
 //48
 const regOptCodeX64 = {
@@ -243,6 +245,14 @@ function pLine(line){
         line = result + ' ' + from
 
         OFFSET+=7
+        return line
+    }else if(line.split(' ')[0]=='mov'){
+        console.log('line', line)
+        const params = getParams('mov', line)
+        
+        line = getMovInstruction(params)
+
+        OFFSET+=line.split(' ').length
         return line
     }else if(line.split(' ')[0]=='xor'){
         console.log('line', line)
