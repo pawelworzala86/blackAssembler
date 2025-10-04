@@ -72,44 +72,44 @@ let REGS_RD = Object.keys(regOptCodeX64RD)
 
 
 
-
+/*
 const instructions = [
-    /*{ mnemonic: "mov r32, imm32", opcode: "B8 + rd" },
+    { mnemonic: "mov r32, imm32", opcode: "B8 + rd" },
     { mnemonic: "mov r64, imm32", opcode: "B8 + rd" },
     { mnemonic: "mov r/m32, r32", opcode: "89 /r" },
     { mnemonic: "mov r/m64, r64", opcode: "48 89 /r" },
     { mnemonic: "mov r/m64, imm32", opcode: "48 C7 /r id" },
-    { mnemonic: "mov r/m64, imm64", opcode: "48 C7 /r id" },*/
+    { mnemonic: "mov r/m64, imm64", opcode: "48 C7 /r id" },
 
-    /*{ mnemonic: "add r/m8, imm8", opcode: "80 /0 ib" },
+    { mnemonic: "add r/m8, imm8", opcode: "80 /0 ib" },
     { mnemonic: "add r/m32, imm32", opcode: "81 /0 id" },
     { mnemonic: "add r/m64, imm32", opcode: "48 81 /0 id" },
-    { mnemonic: "add r/m64, imm8", opcode: "48 83 /0 id" },*/
+    { mnemonic: "add r/m64, imm8", opcode: "48 83 /0 id" },
 
-    /*{ mnemonic: "sub r/m8, imm8", opcode: "80 /5 ib" },
+    { mnemonic: "sub r/m8, imm8", opcode: "80 /5 ib" },
     { mnemonic: "sub r/m32, imm32", opcode: "81 /5 id" },
     { mnemonic: "sub r/m64, imm32", opcode: "48 81 /5 id" },
-    { mnemonic: "sub r/m64, imm8", opcode: "48 83 /5 id" },*/
+    { mnemonic: "sub r/m64, imm8", opcode: "48 83 /5 id" },
 
-    /*{ mnemonic: "mul r/m8", opcode: "F6 /4" },
+    { mnemonic: "mul r/m8", opcode: "F6 /4" },
     { mnemonic: "mul r/m32", opcode: "F7 /4" },
-    { mnemonic: "mul r/m64", opcode: "48 F7 /4" },*/
+    { mnemonic: "mul r/m64", opcode: "48 F7 /4" },
 
-    /*{ mnemonic: "div r/m8", opcode: "F6 /6" },
+    { mnemonic: "div r/m8", opcode: "F6 /6" },
     { mnemonic: "div r/m32", opcode: "F7 /6" },
-    { mnemonic: "div r/m64", opcode: "48 F7 /6" },*/
+    { mnemonic: "div r/m64", opcode: "48 F7 /6" },
 
-    /*{ mnemonic: "and r/m8, imm8", opcode: "80 /4 ib" },
+    { mnemonic: "and r/m8, imm8", opcode: "80 /4 ib" },
     { mnemonic: "and r/m32, imm32", opcode: "81 /4 id" },
-    { mnemonic: "and r/m64, imm32", opcode: "48 81 /4 id" },*/
+    { mnemonic: "and r/m64, imm32", opcode: "48 81 /4 id" },
 
-    /*{ mnemonic: "or r/m8, imm8", opcode: "80 /1 ib" },
+    { mnemonic: "or r/m8, imm8", opcode: "80 /1 ib" },
     { mnemonic: "or r/m32, imm32", opcode: "81 /1 id" },
-    { mnemonic: "or r/m64, imm32", opcode: "48 81 /1 id" },*/
+    { mnemonic: "or r/m64, imm32", opcode: "48 81 /1 id" },
 
-    /*{ mnemonic: "xor r/m8, imm8", opcode: "80 /6 ib" },
+    { mnemonic: "xor r/m8, imm8", opcode: "80 /6 ib" },
     { mnemonic: "xor r/m32, imm32", opcode: "81 /6 id" },
-    { mnemonic: "xor r/m64, imm32", opcode: "48 81 /6 id" },*/
+    { mnemonic: "xor r/m64, imm32", opcode: "48 81 /6 id" },
 
     { mnemonic: "cmp r/m8, imm8", opcode: "80 /7 ib" },
     { mnemonic: "cmp r/m32, imm32", opcode: "81 /7 id" },
@@ -125,9 +125,11 @@ const instructions = [
     { mnemonic: "ret", opcode: "C3" },
     { mnemonic: "ret imm16", opcode: "C2 iw" },
 ];
+*/
 
-const mnemonics = ['mov','add','sub','mul','div','and','or','xor','cmp','jmp','call','ret']
+//const mnemonics = ['mov','add','sub','mul','div','and','or','xor','cmp','jmp','call','ret']
 
+/*
 function getInstruction(code){
     for(const instruction of instructions){
         if(instruction.mnemonic==code){
@@ -136,10 +138,10 @@ function getInstruction(code){
     }
     return null
 }
+*/
 
 
-
-
+/*
 function getOptCode(opt,reg='rax'){
     let registerMode = conv.intToBinary3Bits(3,2)//3=11
     let cd = conv.intToBinary3Bits(opt,3)
@@ -151,7 +153,7 @@ function getOptCodeRegReg(target,from){
     let cd = regOptCodeX64[target]
     let optCode = regOptCodeX64[from]
     return registerMode+optCode+cd
-}
+}*/
 
 
 
@@ -267,7 +269,10 @@ function pLine(line){
 
         OFFSET+=line.split(' ').length
         return line
-    }else{
+    }else if(line.split(' ')[0]=='ret'){
+        OFFSET+=1
+        return 'C3'
+    }/*else{
 
         let name = line.split(' ')[0]
 
@@ -336,7 +341,8 @@ function pLine(line){
 
             return ''
         }
-    }
+    }*/
+   return ''
 }
 
 
