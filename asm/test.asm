@@ -7,16 +7,10 @@ section '.text' code readable executable
     start:
     sub	rsp, 8*5
 
+    lea rax, [message]
     lea rcx, [message]
     call [printf]
 
-    lea rcx, [messageB]
-    call [printf]
-
-    lea rcx, [messageC]
-    call [printf]
-
-    ;add rsp, 8*5
     mov rcx, 0
     call [ExitProcess]
 

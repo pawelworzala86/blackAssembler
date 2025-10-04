@@ -213,30 +213,32 @@ function pLine(line){
         //console.log('LEA', params)
 
         let lea = '8d'
-        let bytemode = {
-            'rax': '08',
-            'rcx': '0d',
-            'rdx': '15',
-            'rbx': '1d',
-            'rsp': '24',
-            'rbp': '2d',
-            'rsi': '35',
-            'rdi': '3d',
-            'r8':  '41 08',
-            'r9':  '41 0d',
-            'r10': '41 15',
-            'r11': '41 1d',
-            'r12': '41 24',
-            'r13': '41 2d',
-            'r14': '41 35',
-            'r15': '41 3d',
+        let reg_table = {
+            'rax': { rex: '48', modrm: '05' },
+            'rcx': { rex: '48', modrm: '0d' },
+            'rdx': { rex: '48', modrm: '15' },
+            'rbx': { rex: '48', modrm: '1d' },
+            'rsp': { rex: '48', modrm: '25' },
+            'rbp': { rex: '48', modrm: '2d' },
+            'rsi': { rex: '48', modrm: '35' },
+            'rdi': { rex: '48', modrm: '3d' },
+            'r8':  { rex: '4c', modrm: '05' },
+            'r9':  { rex: '4c', modrm: '0d' },
+            'r10': { rex: '4c', modrm: '15' },
+            'r11': { rex: '4c', modrm: '1d' },
+            'r12': { rex: '4c', modrm: '25' },
+            'r13': { rex: '4c', modrm: '2d' },
+            'r14': { rex: '4c', modrm: '35' },
+            'r15': { rex: '4c', modrm: '3d' },
         }[params[0]]
 
-        let result = '48 '+lea+' '+bytemode
+        let result = reg_table.rex + ' ' + lea + ' ' + reg_table.modrm
 
+        // LE - funkcja zamieniająca wartość little endian, np. 0x12345678 -> '78 56 34 12'
         from = LE(params[1].replace('0x',''))
 
-        line = result+' '+from
+        line = result + ' ' + from
+
         OFFSET+=7
         return line
     }else if(line.split(' ')[0]=='call'){
