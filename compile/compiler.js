@@ -1,4 +1,5 @@
 const conv = require('./convert.js')
+const {getXorInstruction} = require('./instructions/xor.js')
 
 //48
 const regOptCodeX64 = {
@@ -91,9 +92,9 @@ const instructions = [
     { mnemonic: "or r/m32, imm32", opcode: "81 /1 id" },
     { mnemonic: "or r/m64, imm32", opcode: "48 81 /1 id" },
 
-    { mnemonic: "xor r/m8, imm8", opcode: "80 /6 ib" },
+    /*{ mnemonic: "xor r/m8, imm8", opcode: "80 /6 ib" },
     { mnemonic: "xor r/m32, imm32", opcode: "81 /6 id" },
-    { mnemonic: "xor r/m64, imm32", opcode: "48 81 /6 id" },
+    { mnemonic: "xor r/m64, imm32", opcode: "48 81 /6 id" },*/
 
     { mnemonic: "cmp r/m8, imm8", opcode: "80 /7 ib" },
     { mnemonic: "cmp r/m32, imm32", opcode: "81 /7 id" },
@@ -207,6 +208,8 @@ function make(code,CALLS,OFFSET=0x3000, ADDR){
 
 
 function pLine(line){
+
+    console.log('line', line)
     
     if(line.split(' ')[0]=='lea'){
         const params = getParams('lea', line)
@@ -240,6 +243,19 @@ function pLine(line){
         line = result + ' ' + from
 
         OFFSET+=7
+        return line
+    }else if(line.split(' ')[0]=='xor'){
+        console.log('line', line)
+        const params = getParams('xor', line)
+        
+        // getXorInstruction(['rax', 'rax'])      // => '48 31 C0'
+        // getXorInstruction(['r12', 'r12'])      // => '4D 31 E4'
+        // getXorInstruction(['r9', '0x12345678'])// => '49 81 F1 78 56 34 12'
+
+        //console.log('params',params)
+        line = getXorInstruction(params)
+
+        OFFSET+=line.split(' ').length
         return line
     }else if(line.split(' ')[0]=='call'){
         const params = getParams('call', line)
@@ -291,8 +307,10 @@ function pLine(line){
         if(mnemonics.includes(name)){
 
             const params = getParams(name, line)
-            const mnem = params.map(param=>{
-                if(REGS.includes(param)){
+            const mnem = params.map((param,idx)=>{
+                if(REGS.includes(param)&&(idx==1)){
+                    return 'imm32'
+                }else if(REGS.includes(param)){
                     return 'r/m64'
                 }else if((param.indexOf('0x')>-1)&&(param.length<=4)){
                     return 'imm8'
@@ -305,7 +323,7 @@ function pLine(line){
                 }
             })
             const instr = name+' '+mnem.join(', ')
-            //console.log('INSTR', instr)
+            console.log('INSTR', instr)
             let rightReg = REGS.includes(params[1])
             let target = params[0]
             let from = params[1]

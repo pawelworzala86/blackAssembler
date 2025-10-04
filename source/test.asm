@@ -7,6 +7,7 @@
     call printf
 .skip2:
     lea rax, message
+    xor rax, rax
     lea rcx, message
     ;lea rcx, messageB   ;0x00000fd8
     call printf
