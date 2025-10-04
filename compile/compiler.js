@@ -1,5 +1,3 @@
-const conv = require('./convert.js')
-
 const {getXorInstruction} = require('./instructions/xor.js')
 const {getMovInstruction} = require('./instructions/mov.js')
 const {getLeaInstruction} = require('./instructions/lea.js')
@@ -16,7 +14,19 @@ const {getCallInstruction} = require('./instructions/call.js')
 const {getJmpInstruction} = require('./instructions/jmp.js')
 
 
-
+const instructions = {
+    'xor': getXorInstruction,
+    'mov': getMovInstruction,
+    'lea': getLeaInstruction,
+    'add': getAddInstruction,
+    'sub': getSubInstruction,
+    'mul': getMulInstruction,
+    'div': getDivInstruction,
+    'and': getAndInstruction,
+    'or': getOrInstruction,
+    'call': getCallInstruction,
+    //'jmp': getJmpInstruction,
+}
 
 
 
@@ -89,9 +99,30 @@ function make(code,CALLS,OFFSET=0x3000, ADDR){
 
 function pLine(line){
 
+    if(line.trim().length==0){
+        return line
+    }
+
     console.log('line', line)
+
+    const instr = line.split(' ')[0]
+
+    /*if(['db','dd','dq','rd','rq'].includes(instr)){
+        return line
+    }else if(!instructions.hasOwnProperty(instr)){
+        console.log('UNKNOW INSTRUCTION: ', instr)
+        process.exit(0)
+    }else */
+    if(instructions[instr]){
+        const params = getParams(instr, line)
+
+        line = instructions[instr](params,CALLS,OFFSET)
+
+        OFFSET+=line.split(' ').length
+        return line
+    }
     
-    if(line.split(' ')[0]=='lea'){
+    /*if(line.split(' ')[0]=='lea'){
         const params = getParams('lea', line)
         //console.log('LEA', params)
 
@@ -115,7 +146,8 @@ function pLine(line){
 
         OFFSET+=line.split(' ').length
         return line
-    }else if(line.split(' ')[0]=='call'){
+    }else */
+    /*if(line.split(' ')[0]=='call'){
         const params = getParams('call', line)
         //console.log('CALL', params)
 
@@ -123,7 +155,8 @@ function pLine(line){
 
         OFFSET+=line.split(' ').length
         return line
-    }else if(line.split(' ')[0]=='jmp'){
+    }else */
+    if(line.split(' ')[0]=='jmp'){
         let parts = line.split(' ')
 
         line = getJmpInstruction(parts,CALLS,OFFSET)
