@@ -4,6 +4,10 @@ const {getXorInstruction} = require('./instructions/xor.js')
 const {getMovInstruction} = require('./instructions/mov.js')
 const {getLeaInstruction} = require('./instructions/lea.js')
 
+const {getAddInstruction} = require('./instructions/add.js')
+const {getSubInstruction} = require('./instructions/sub.js')
+const {getMulInstruction} = require('./instructions/mul.js')
+
 //48
 const regOptCodeX64 = {
     'rax': '000',//	Rejestr eax (32-bit) lub rax (64-bit)
@@ -69,19 +73,19 @@ const instructions = [
     { mnemonic: "mov r/m64, imm32", opcode: "48 C7 /r id" },
     { mnemonic: "mov r/m64, imm64", opcode: "48 C7 /r id" },*/
 
-    { mnemonic: "add r/m8, imm8", opcode: "80 /0 ib" },
+    /*{ mnemonic: "add r/m8, imm8", opcode: "80 /0 ib" },
     { mnemonic: "add r/m32, imm32", opcode: "81 /0 id" },
     { mnemonic: "add r/m64, imm32", opcode: "48 81 /0 id" },
-    { mnemonic: "add r/m64, imm8", opcode: "48 83 /0 id" },
+    { mnemonic: "add r/m64, imm8", opcode: "48 83 /0 id" },*/
 
-    { mnemonic: "sub r/m8, imm8", opcode: "80 /5 ib" },
+    /*{ mnemonic: "sub r/m8, imm8", opcode: "80 /5 ib" },
     { mnemonic: "sub r/m32, imm32", opcode: "81 /5 id" },
     { mnemonic: "sub r/m64, imm32", opcode: "48 81 /5 id" },
-    { mnemonic: "sub r/m64, imm8", opcode: "48 83 /5 id" },
+    { mnemonic: "sub r/m64, imm8", opcode: "48 83 /5 id" },*/
 
-    { mnemonic: "mul r/m8", opcode: "F6 /4" },
+    /*{ mnemonic: "mul r/m8", opcode: "F6 /4" },
     { mnemonic: "mul r/m32", opcode: "F7 /4" },
-    { mnemonic: "mul r/m64", opcode: "48 F7 /4" },
+    { mnemonic: "mul r/m64", opcode: "48 F7 /4" },*/
 
     { mnemonic: "div r/m8", opcode: "F6 /6" },
     { mnemonic: "div r/m32", opcode: "F7 /6" },
@@ -109,6 +113,7 @@ const instructions = [
 
     { mnemonic: "call rel32", opcode: "E8 cd" },
     { mnemonic: "call r/m64", opcode: "FF /2" },
+
     { mnemonic: "ret", opcode: "C3" },
     { mnemonic: "ret imm16", opcode: "C2 iw" },
 ];
