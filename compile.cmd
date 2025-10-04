@@ -1,5 +1,5 @@
-node compile
+node compile %1
 
 cd out
-testNew.exe
+%1.exe
 cd..

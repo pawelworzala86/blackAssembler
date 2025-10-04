@@ -97,6 +97,6 @@ function writeSection(section,idx){
 }
 
 
+const fileName = process.argv[2]
 
-
-fs.writeFileSync('./out/testNew.exe', fileBuffer)
+fs.writeFileSync('./out/'+fileName+'.exe', fileBuffer)

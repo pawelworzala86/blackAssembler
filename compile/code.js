@@ -9,7 +9,9 @@ const CALLS = {}
 const iCALLS = {}
 const tCALLS = {}
 
-let code = fs.readFileSync('./source/test.asm').toString()
+const fileName = process.argv[2]
+
+let code = fs.readFileSync('./source/'+fileName+'.asm').toString()
 code = prepare(code)
 
 const source = {
