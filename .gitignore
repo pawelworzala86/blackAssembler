@@ -1,7 +1,7 @@
-/cache/*.txt
-/cache/*.js
-/cache/*.asm
-/cache/*.ts
-/cache/*.inc
+cache/*.txt
+cache/*.js
+cache/*.asm
+cache/*.ts
+cache/*.inc
 
-/out/*.exe
+out/*.exe
