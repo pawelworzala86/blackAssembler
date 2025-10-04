@@ -65,5 +65,8 @@ sections.forEach(section => {
         fs.writeFileSync(`./sections/${section.name.trim()}.bin`, section.sectionData);
         fs.writeFileSync(`./sections/${section.name.trim()}.txt`, section.sectionData.toString('hex'));
     }
+    delete section.sectionData
     idx++
 });
+
+fs.writeFileSync(`./sections/sections.json`, JSON.stringify(sections,null,4));

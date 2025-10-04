@@ -7,10 +7,9 @@ headers.dosHeader = fs.readFileSync('./headers/dosHeader.bin')
 headers.peHeader = fs.readFileSync('./headers/peHeader.bin')
 headers.fileHeader = fs.readFileSync('./headers/fileHeader.bin')
 headers.optionalHeader = fs.readFileSync('./headers/optionalHeader.bin')
-headers.sectionHeaders = fs.readFileSync('./headers/sectionHeaders.bin')
+let sectionHeaders = fs.readFileSync('./headers/sectionHeaders.bin')
 
 
-const fileBuffer = Buffer.concat([headers.dosHeader, headers.peHeader, headers.fileHeader, headers.optionalHeader, headers.sectionHeaders]);
 
 
 
@@ -30,6 +29,32 @@ const sectionsData = {}
 sectionsData.text = loadSection(text)
 sectionsData.data = loadSection(data)
 sectionsData.idata = loadSection(idata)
+
+sectionsData.stext = Math.ceil(sectionsData.text.length / 512) * 512;
+sectionsData.sdata = Math.ceil(sectionsData.data.length / 512) * 512;
+sectionsData.sidata = Math.ceil(sectionsData.idata.length / 512) * 512;
+
+
+
+//headers.sectionHeaders = Buffer.alloc(1024);
+// Jeśli bufor jest za krótki, powiększamy go do size bajtów
+const size = (2248-2048)+sectionsData.stext+sectionsData.sdata+sectionsData.sidata
+if (sectionHeaders.length < size) {
+  const extended = Buffer.alloc(size);
+  sectionHeaders.copy(extended); // Kopiuje zawartość na początek extended
+  headers.sectionHeaders = extended;
+} else if (sectionHeaders.length > size) {
+  // Jeśli plik jest dłuższy niż size, przycinamy
+  headers.sectionHeaders = sectionHeaders.slice(0, size);
+} else {
+  headers.sectionHeaders = sectionHeaders;
+}
+
+const fileBuffer = Buffer.concat([headers.dosHeader, headers.peHeader, headers.fileHeader, headers.optionalHeader, headers.sectionHeaders]);
+
+
+
+
 
 const sections = []
 
@@ -53,26 +78,29 @@ sections.push({
     name: ".text",
     virtualSize: sectionsData.text.length,
     virtualAddress: 4096*1,
-    sizeOfRawData: 512,
-    pointerToRawData: 512*1,
+    sizeOfRawData: sectionsData.stext,
+    pointerToRawData: sectionsData.stext,
     sectionData: sectionsData.text,
 })
 sections.push({
     name: ".data",
     virtualSize: sectionsData.data.length,
     virtualAddress: 4096*2,
-    sizeOfRawData: 512,
-    pointerToRawData: 512*2,
+    sizeOfRawData: sectionsData.sdata,
+    pointerToRawData: sectionsData.stext+sectionsData.sdata,
     sectionData: sectionsData.data,
 })
 sections.push({
     name: ".idata",
     virtualSize: sectionsData.idata.length,
     virtualAddress: 4096*3,
-    sizeOfRawData: 512,
-    pointerToRawData: 512*3,
+    sizeOfRawData: sectionsData.sidata,
+    pointerToRawData: sectionsData.stext+sectionsData.sdata+sectionsData.sidata,
     sectionData: sectionsData.idata,
 })
+
+//console.log(sections)
+//process.exit(1)
 
 sections.map((section,idx)=>{
     if(section.name.length){
