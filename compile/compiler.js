@@ -211,8 +211,9 @@ function make(code,CALLS,OFFSET=0x3000, ADDR){
     function getParams(name, line){
         let params = line.replace(name+' ','')
         params = params.split(',').map(p=>p.trim()).map(param=>{
-            if(param&&(param.indexOf('0x')==-1)&&/^[a-zA-Z0-9\_]+$/gm.exec(param)&&!REGS.includes(param)){
-                let addr = getAddr(param)
+            //if(param&&(param.indexOf('0x')==-1)&&/^[a-zA-Z0-9\_]+$/gm.exec(param)&&!REGS.includes(param)){
+            if(param[0]=='['){
+                let addr = getAddr(param.substring(1,param.length-1))
                 //console.log('param',param,addr)
                 param = '0x'+DectoHex4(addr)
             }
