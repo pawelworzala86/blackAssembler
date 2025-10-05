@@ -181,65 +181,65 @@ function pLine(line){
 let lines = code.split('\n')
 function parse(){
     OFFSET=offset
-lines = lines.map(line=>{
-    line=line.replace(/\;.*/gm,'')
-    line=line.trim()
-    if(line.split(' ')[0]=='dd'){
-        let val = line.replace('dd','').trim().split(',').map(v=>v.trim()).map(v=>{
-            if(v.indexOf('RVA')>-1){
-                let vn = v.replace('RVA ','').trim()
-                console.log('vn',vn)
-                if(CALLS[vn]){
-                    return 'RVA '+CALLS[vn]
-                }else{
-                    return 'RVA '+vn
+    lines = lines.map(line=>{
+        line=line.replace(/\;.*/gm,'')
+        line=line.trim()
+        if(line.split(' ')[0]=='dd'){
+            let val = line.replace('dd','').trim().split(',').map(v=>v.trim()).map(v=>{
+                if(v.indexOf('RVA')>-1){
+                    let vn = v.replace('RVA ','').trim()
+                    console.log('vn',vn)
+                    if(CALLS[vn]){
+                        return 'RVA '+CALLS[vn]
+                    }else{
+                        return 'RVA '+vn
+                    }
                 }
-            }
-            return v
-        })
-        OFFSET+=val.length*4
-        line = 'dd '+val.join(',')
-    }
-    if(line.split(' ')[0]=='dq'){
-        let val = line.replace('dq','').trim().split(',').map(v=>v.trim()).map(v=>{
-            if(v.indexOf('RVA')>-1){
-                let vn = v.replace('RVA ','').trim()
-                console.log('vn',vn)
-                if(CALLS[vn]){
-                    return 'RVA '+CALLS[vn]
-                }else{
-                    return 'RVA '+vn
+                return v
+            })
+            OFFSET+=val.length*4
+            line = 'dd '+val.join(',')
+        }
+        if(line.split(' ')[0]=='dq'){
+            let val = line.replace('dq','').trim().split(',').map(v=>v.trim()).map(v=>{
+                if(v.indexOf('RVA')>-1){
+                    let vn = v.replace('RVA ','').trim()
+                    console.log('vn',vn)
+                    if(CALLS[vn]){
+                        return 'RVA '+CALLS[vn]
+                    }else{
+                        return 'RVA '+vn
+                    }
                 }
-            }
-            return v
+                return v
+            })
+            OFFSET+=val.length*8
+            line = 'dq '+val.join(',')
+        }
+        if(line.split(' ')[0]=='dw'){
+            let val = line.replace('dw','').trim().split(',').map(v=>v.trim())
+            OFFSET+=val.length*2
+            return line
+        }
+        if(line.split(' ')[0]=='db'){
+            let val = line.replace('db','').trim().split('\'')[1]
+            OFFSET+=val.length+1
+            return line
+        }
+        line=line.replace(/([\.a-zA-Z0-9\_]+)\:/gm,match=>{
+            let name = match.split(':')[0].trim()
+            CALLS[name] = OFFSET
+            return ''
         })
-        OFFSET+=val.length*8
-        line = 'dq '+val.join(',')
-    }
-    if(line.split(' ')[0]=='dw'){
-        let val = line.replace('dw','').trim().split(',').map(v=>v.trim())
-        OFFSET+=val.length*2
+
+
+        const result = pLine(line)
+        //if(result&&result.length){
+        //    return result
+        //}
+
         return line
-    }
-    if(line.split(' ')[0]=='db'){
-        let val = line.replace('db','').trim().split('\'')[1]
-        OFFSET+=val.length+1
-        return line
-    }
-    line=line.replace(/([\.a-zA-Z0-9\_]+)\:/gm,match=>{
-        let name = match.split(':')[0].trim()
-        CALLS[name] = OFFSET
-        return ''
     })
-
-
-    const result = pLine(line)
-    //if(result&&result.length){
-    //    return result
-    //}
-
-    return line
-})
 }
 parse()
 console.log('CALLS',CALLS)
