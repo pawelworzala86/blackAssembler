@@ -1,6 +1,6 @@
-# blackAssembler\
+# blackAssembler
 \
 run in cmd on Win:\
-.\compile.cmd\
+.\compile.cmd test\
 \
 command start compile .\source\test.asm
