@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 
-module.exports = function(importData){
+module.exports = function(importData,code){
 
 
 /*
@@ -85,7 +85,9 @@ function importFromData(data){
         console.log(parts)
         let name = parts[0]
         for(let i=1;i<parts.length;i+=2){
-            addDllFunc(name,parts[i],parts[i+1])
+            if(new RegExp('\\['+parts[i]+'\\]','gm').exec(code)){
+                addDllFunc(name,parts[i],parts[i+1])
+            }
         }
     })
     console.log(data)

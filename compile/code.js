@@ -39,7 +39,7 @@ console.log(source)
 
 
 
-let idata = prepare(parseIData(source.idata))
+let idata = prepare(parseIData(source.idata,source.text))
 
 /*`  dd 0,0,0,RVA kernel_name,RVA kernel_table
   dd 0,0,0,RVA msvcrt_name,RVA msvcrt_table
