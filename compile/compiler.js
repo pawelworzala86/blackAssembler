@@ -25,7 +25,10 @@ const instructions = {
     'and': getAndInstruction,
     'or': getOrInstruction,
     'call': getCallInstruction,
-    //'jmp': getJmpInstruction,
+    'jmp': getJmpInstruction,
+    'ret': ()=>{
+        return 'C3'
+    }
 }
 
 
@@ -156,17 +159,18 @@ function pLine(line){
         OFFSET+=line.split(' ').length
         return line
     }else */
-    if(line.split(' ')[0]=='jmp'){
+    /*if(line.split(' ')[0]=='jmp'){
         let parts = line.split(' ')
 
         line = getJmpInstruction(parts,CALLS,OFFSET)
 
         OFFSET+=line.split(' ').length
         return line
-    }else if(line.split(' ')[0]=='ret'){
-        OFFSET+=1
-        return 'C3'
-    }
+    }else */
+    //if(line.split(' ')[0]=='ret'){
+    //    OFFSET+=1
+    //    return 'C3'
+    //}
     return ''
 }
 

@@ -1,6 +1,6 @@
 export function getJmpInstruction(parts,CALLS,OFFSET) {
     //let parts = line.split(' ')
-        let func = parts[1]
+        let func = parts[0]
         //let off = toHexMinus2(num+1)
         //console.log('CALLS',CALLS)
         let num = CALLS[func]-(OFFSET+5)//FUNCTIONS[func]-(OFFSET+5)
